@@ -10,7 +10,7 @@ public class MarkdownParse {
         // find the next [, then find the ], then find the (, then take up to
         // the next )
         int currentIndex = 0;
-        if (!markdown.contains("(") && !markdown.contains("[")) {
+        if (!markdown.contains("(") || !markdown.contains("[")) {
             return toReturn;
         }
 
