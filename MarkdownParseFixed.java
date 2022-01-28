@@ -4,28 +4,33 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import javax.sound.sampled.SourceDataLine;
+
 public class MarkdownParseFixed {
     public static ArrayList<String> getLinks(String markdown) {
         ArrayList<String> toReturn = new ArrayList<>();
         // find the next [, then find the ], then find the (, then take up to
         // the next )
-        int currentIndex = 0;
-        if (!markdown.contains("(") && !markdown.contains(")") && !markdown.contains("[") && !markdown.contains("]")) {
-            return toReturn;
-        }
+        String[] linkArray = markdown.split("\n");
+        for(String link: linkArray) {
+            int currentIndex = 0;
+            while(currentIndex < link.length()) {
+                int imageIndex = link.indexOf("!", currentIndex);
+                int nextOpenBracket = link.indexOf("[", currentIndex);
+                int nextCloseBracket = link.indexOf("]", nextOpenBracket);
+                int openParen = link.indexOf("(", nextCloseBracket);
+                int closeParen = link.lastIndexOf(")");
 
-        while(currentIndex < markdown.length()) {
-            int imageIndex = markdown.indexOf("!", currentIndex);
-            int nextOpenBracket = markdown.indexOf("[", currentIndex);
-            int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
-            int openParen = markdown.indexOf("(", nextCloseBracket);
-            int closeParen = markdown.indexOf(")", openParen);
+                if(nextOpenBracket == -1 || nextCloseBracket == -1 || openParen == -1 || closeParen == -1) {
+                    break;
+                }
 
-            if (imageIndex != -1 && imageIndex < nextOpenBracket) {
-                currentIndex = closeParen + 1;
-            } else {
-                toReturn.add(markdown.substring(openParen + 1, closeParen));
-                currentIndex = closeParen + 1;
+                if (imageIndex != -1 && imageIndex == nextOpenBracket - 1) {
+                    currentIndex = closeParen + 1;
+                } else {
+                    toReturn.add(link.substring(openParen + 1, closeParen));
+                    currentIndex = closeParen + 1;
+                }
             }
         }
         return toReturn;
