@@ -15,18 +15,24 @@ public class MarkdownParse {
         }
 
         while(currentIndex < markdown.length()) {
+            int imageIndex = markdown.indexOf("!", currentIndex);
             int nextOpenBracket = markdown.indexOf("[", currentIndex);
             int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
             int openParen = markdown.indexOf("(", nextCloseBracket);
             int closeParen = markdown.indexOf(")", openParen);
-            toReturn.add(markdown.substring(openParen + 1, closeParen));
-            currentIndex = closeParen + 1;
+
+            if (imageIndex != -1 && imageIndex < nextOpenBracket) {
+                currentIndex = closeParen + 1;
+            } else {
+                toReturn.add(markdown.substring(openParen + 1, closeParen));
+                currentIndex = closeParen + 1;
+            }
         }
         return toReturn;
     }
     public static void main(String[] args) throws IOException {
         if(args.length == 0) {
-            System.out.println("No argument given");
+            System.out.println("No file name given");
             return;
         }
         
