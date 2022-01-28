@@ -10,7 +10,7 @@ public class MarkdownParse {
         // find the next [, then find the ], then find the (, then take up to
         // the next )
         int currentIndex = 0;
-        if (!markdown.contains("(") || !markdown.contains("[")) {
+        if (!markdown.contains("(") && !markdown.contains(")") && !markdown.contains("[") && !markdown.contains("]")) {
             return toReturn;
         }
 
@@ -25,6 +25,11 @@ public class MarkdownParse {
         return toReturn;
     }
     public static void main(String[] args) throws IOException {
+        if(args.length == 0) {
+            System.out.println("No argument given");
+            return;
+        }
+        
 		Path fileName = Path.of(args[0]);
 	    String contents = Files.readString(fileName);
         ArrayList<String> links = getLinks(contents);
