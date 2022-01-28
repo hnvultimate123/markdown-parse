@@ -11,6 +11,7 @@ public class MarkdownParse {
         // the next )
         int currentIndex = 0;
         while(currentIndex < markdown.length()) {
+            int imageIndex = markdown.indexOf("!", currentIndex);
             int nextOpenBracket = markdown.indexOf("[", currentIndex);
             int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
             int openParen = markdown.indexOf("(", nextCloseBracket);
@@ -19,9 +20,13 @@ public class MarkdownParse {
             if(nextOpenBracket == -1 || nextCloseBracket == -1 || openParen == -1 || closeParen == -1) {
                 break;
             }
-            
-            toReturn.add(markdown.substring(openParen + 1, closeParen));
-            currentIndex = closeParen + 1;
+
+            if (imageIndex != -1 && imageIndex == nextOpenBracket - 1) {
+                currentIndex = closeParen + 1;
+            } else {
+                toReturn.add(markdown.substring(openParen + 1, closeParen));
+                currentIndex = closeParen + 1;
+            }
         }
         return toReturn;
     }
