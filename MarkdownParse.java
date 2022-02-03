@@ -11,23 +11,26 @@ public class MarkdownParse {
         // the next )
         String[] linkArray = markdown.split("\n");
         for(String link: linkArray) {
-            int currentIndex = 0;
-            while(currentIndex < link.length()) {
-                int imageIndex = link.indexOf("!", currentIndex);
-                int nextOpenBracket = link.indexOf("[", currentIndex);
-                int nextCloseBracket = link.indexOf("]", nextOpenBracket);
-                int openParen = link.indexOf("(", nextCloseBracket);
-                int closeParen = link.lastIndexOf(")");
-
-                if(nextOpenBracket == -1 || nextCloseBracket == -1 || openParen == -1 || closeParen == -1) {
-                    break;
-                }
-
-                if (imageIndex != -1 && imageIndex == nextOpenBracket - 1) {
-                    currentIndex = closeParen + 1;
-                } else {
-                    toReturn.add(link.substring(openParen + 1, closeParen));
-                    currentIndex = closeParen + 1;
+            String[] inLineLinksArray = link.split(" ");
+            for(String inLineLink: inLineLinksArray) {
+                int currentIndex = 0;
+                while(currentIndex < inLineLink.length()) {
+                    int imageIndex = inLineLink.indexOf("!", currentIndex);
+                    int nextOpenBracket = inLineLink.indexOf("[", currentIndex);
+                    int nextCloseBracket = inLineLink.indexOf("]", nextOpenBracket);
+                    int openParen = inLineLink.indexOf("(", nextCloseBracket);
+                    int closeParen = inLineLink.lastIndexOf(")");
+    
+                    if(nextOpenBracket == -1 || nextCloseBracket == -1 || openParen == -1 || closeParen == -1) {
+                        break;
+                    }
+    
+                    if (imageIndex != -1 && imageIndex == nextOpenBracket - 1) {
+                        currentIndex = closeParen + 1;
+                    } else {
+                        toReturn.add(inLineLink.substring(openParen + 1, closeParen));
+                        currentIndex = closeParen + 1;
+                    }
                 }
             }
         }
