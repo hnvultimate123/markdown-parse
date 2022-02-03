@@ -35,7 +35,7 @@ public class MarkdownParse {
     }
     public static void main(String[] args) throws IOException {
         if(args.length == 0) {
-            System.out.println("No filename given");
+            System.out.println("No file name given");
             return;
         }
         
